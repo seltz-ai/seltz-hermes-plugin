@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # The plugin's directory, relative to the repository root.
+  PLUGIN_DIR: .
+
+jobs:
+  validate:
+    name: Validate plugin
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Skips validation only while the repository has no plugin files at all.
+      - name: Find the plugin manifest
+        id: manifest
+        run: |
+          for name in plugin.yaml plugin.yml plugin.json; do
+            if [ -f "$PLUGIN_DIR/$name" ]; then
+              echo "present=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
+          if git ls-files | grep -qE '(^|/)(plugin\.(ya?ml|json)|__init__\.py)$'; then
+            echo "::error::Plugin files exist but $PLUGIN_DIR has no plugin.yaml, plugin.yml or plugin.json. Set PLUGIN_DIR in this workflow."
+            exit 1
+          fi
+          echo "::notice::No plugin files yet, so there is nothing to validate."
+
+      # Dependabot ignores this action (see dependabot.yml), so bump the action
+      # and hermes-ref together by hand. This step fails if they differ.
+      - name: Check the Hermes pins match
+        run: |
+          action=$(grep -oE 'plugin-validate@[0-9a-f]{40}' .github/workflows/ci.yml | cut -d@ -f2)
+          ref=$(grep -oE 'hermes-ref: [0-9a-f]{40}' .github/workflows/ci.yml | cut -d' ' -f2)
+          if [ -z "$action" ] || [ "$action" != "$ref" ]; then
+            echo "::error::The plugin-validate action ($action) and hermes-ref ($ref) must be the same commit."
+            exit 1
+          fi
+
+      # `hermes plugins validate` at a pinned Hermes commit. The catalog also
+      # runs it with --install-deps and adds payload and self-update checks,
+      # which this action doesn't.
+      - name: Validate with Hermes
+        if: steps.manifest.outputs.present == 'true'
+        uses: NousResearch/hermes-agent/.github/actions/plugin-validate@6c1e7534ead036c471da854d8c1b168564c927c8
+        with:
+          path: ${{ env.PLUGIN_DIR }}
+          hermes-ref: 6c1e7534ead036c471da854d8c1b168564c927c8
+
+  # Aggregating job the org rulesets require as the `ci` status check on main.
+  ci:
+    if: always()
+    needs: [validate]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Job results: ${{ toJSON(needs.*.result) }}"
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped') }}" == "true" ]]; then
+            exit 1
+          fi

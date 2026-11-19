@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # Pinned to a hermes-agent commit together with hermes-ref in ci.yml.
+      - dependency-name: NousResearch/hermes-agent/.github/actions/plugin-validate
