@@ -15,7 +15,7 @@ name: seltz
 title: Seltz
 repo: https://github.com/seltz-ai/seltz-hermes-plugin
 sha: "<40-character-commit-sha>"
-description: "Source-backed web search, news, company and LinkedIn lookups, financial reports, Wikipedia, and page fetch. Sign in through the Seltz Console (OAuth); the packaged connection is the SELTZ_API_KEY fallback. Disclosure — Connects to https://mcp.seltz.ai/mcp and sends it the queries the agent asks Seltz to run. OAuth also contacts https://console.seltz.ai. Calls use the user's Seltz account."
+description: "Source-backed web search, news, company and LinkedIn lookups, financial reports, Wikipedia, and page fetch. Sign in through the Seltz Console (OAuth); the packaged connection is the SELTZ_API_KEY fallback. Disclosure — Connects to https://mcp.seltz.ai/mcp and sends it the search queries and page URLs the agent asks Seltz to search or fetch. OAuth also contacts https://console.seltz.ai. Calls use the user's Seltz account."
 maintainer: seltz-ai
 tier: community
 category: web
