@@ -20,7 +20,7 @@ click Allow. Do not add an `Authorization` header, and do not set `SELTZ_API_KEY
 
 ## API key (headless fallback)
 
-Create a key in the [Seltz Console](https://console.seltz.ai) and save it on the active profile:
+Create a key in the [Seltz Console](https://console.seltz.ai/?utm_source=hermes&utm_medium=integration&utm_campaign=marketplace) and save it on the active profile:
 
 ```bash
 hermes config set SELTZ_API_KEY sk_your_key

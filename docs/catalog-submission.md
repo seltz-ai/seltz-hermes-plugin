@@ -15,15 +15,15 @@ name: seltz
 title: Seltz
 repo: https://github.com/seltz-ai/seltz-hermes-plugin
 sha: "<40-character-commit-sha>"
-description: "Source-backed web search through Seltz's hosted MCP server, with a Seltz research skill. Sign in through the Seltz Console (OAuth); the packaged connection is the SELTZ_API_KEY fallback. Disclosure — Connects to https://mcp.seltz.ai/mcp and sends it the search queries the agent asks Seltz to run. OAuth also contacts https://console.seltz.ai. Calls use the user's Seltz account."
+description: "Source-backed web search, news, company and LinkedIn lookups, financial reports, Wikipedia, and page fetch. Sign in through the Seltz Console (OAuth); the packaged connection is the SELTZ_API_KEY fallback. Disclosure — Connects to https://mcp.seltz.ai/mcp and sends it the queries the agent asks Seltz to run. OAuth also contacts https://console.seltz.ai. Calls use the user's Seltz account."
 maintainer: seltz-ai
 tier: community
 category: web
 requires_hermes: ">=0.22.2"
-docs_url: https://docs.seltz.ai/integrations/mcp
+docs_url: "https://docs.seltz.ai/integrations/mcp?utm_source=hermes&utm_medium=integration&utm_campaign=marketplace"
 version: "1.0.0"
 platforms: []
-image: https://raw.githubusercontent.com/seltz-ai/seltz-hermes-plugin/<40-character-commit-sha>/assets/seltz-catalog-card.svg
+image: https://raw.githubusercontent.com/seltz-ai/seltz-hermes-plugin/<40-character-commit-sha>/assets/seltz-hermes-banner.png
 known_issues:
   - "Portable manifests cannot declare OAuth. Browser sign-in needs the native mcp_servers.seltz entry in the README. The packaged connection is the SELTZ_API_KEY fallback and is used only when that native entry is absent."
 capabilities:
@@ -41,9 +41,13 @@ tool names in `provides_tools`.
 No `subdir`: the plugin is at the repository root.
 
 The `image` URL must use the same SHA as `sha`, on `raw.githubusercontent.com`.
-`assets/seltz-catalog-card.svg` is a 1200×600 card with the official Seltz
-wordmark centered on white. `assets/logo.svg` is that wordmark, copied from
-`seltz-ai/seltz-codex-plugin`.
+Hermes shows that banner at 2:1. The documented size is 1200×600; other aspect
+ratios are centre-cropped. `assets/seltz-hermes-banner.png` is 2400×1200, the
+same 2:1 ratio, so it is shown whole. It uses the official Seltz logo, the
+line "for Hermes Agent", and the line "Source-backed web search · LinkedIn
+profiles · page fetch". `assets/logo.svg` stays the wordmark in the README,
+copied from `seltz-ai/seltz-codex-plugin`. `assets/seltz-catalog-card.svg` is
+the previous wordmark-only card and is not the listing image.
 
 ## What to disclose in the catalog pull request
 
@@ -58,7 +62,8 @@ wordmark centered on white. `assets/logo.svg` is that wordmark, copied from
 - No runtime dependencies, local executables, shell commands, background
   workers, credential-file reads, core overrides, or self-updater.
 - One bundled skill. The hosted server's live tool schema is the authority.
-  The public MCP page documents a `search` tool.
+  The public MCP page documents `search` (scopes `web`, `news`, `companies`,
+  `people`, `financial-reports`, `wikipedia`) and `fetch`.
 - No Desktop renderer code.
 
 Admission rules and the entry schema are in

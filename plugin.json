@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "seltz",
   "version": "1.0.0",
-  "description": "Search the live web for current, source-backed context through Seltz's official MCP server.",
+  "description": "Source-backed web search, news, company and LinkedIn lookups, financial reports, Wikipedia, and page fetch.",
   "author": {
     "name": "Seltz",
-    "url": "https://seltz.ai"
+    "url": "https://seltz.ai/?utm_source=hermes&utm_medium=integration&utm_campaign=marketplace"
   },
-  "homepage": "https://seltz.ai",
+  "homepage": "https://seltz.ai/?utm_source=hermes&utm_medium=integration&utm_campaign=marketplace",
   "repository": "https://github.com/seltz-ai/seltz-hermes-plugin",
   "license": "Apache-2.0",
-  "keywords": ["seltz", "web-search", "research", "mcp", "hermes"]
+  "keywords": ["seltz", "web-search", "research", "linkedin", "mcp", "hermes"]
 }
